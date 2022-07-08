@@ -6,16 +6,26 @@ function SayHello(){
 }
 
 class Main {
-    public usr: Usuario;
+    public listaPersonas: Array<Persona> = new Array();
+    public usr: Persona;
+    public adm: Persona;
     constructor() {
-        this.usr =  new Usuario("Roberto",42);
+        this.listaPersonas.push(new Usuario("Roberto",42,"rob"));
+        this.listaPersonas.push(new Administrador("Javier", 45));
+        this.usr = new Usuario("Roberto",42,"rob");
+        this.adm = new Administrador("Javier", 45);
         //console.log(this.usr.mostrar());
     }
 }
 function inicio() {    
     let main:Main = new Main();
     let texto = document.getElementById("textarea_1");
-    texto.innerHTML = main.usr.mostrar();
+    texto.innerHTML = main.usr.mostrar() + "\r\n" 
+    texto.innerHTML += main.adm.mostrar() + "\r\n";
+    for(let i in main.listaPersonas)
+        texto.innerHTML += main.listaPersonas[i].mostrar();
+    /*console.log("usuario", main.usr.eliminar());
+    console.log("administrador", main.adm.eliminar());*/
 }
 
 window.onload = inicio;

@@ -1,27 +1,17 @@
-class Usuario {
-    private nombre: string;
-    private edad: number;
+class Usuario extends Persona implements Acciones{
+    private userName: string;
 
-    constructor(nombre:string, edad:number) {
-        this.nombre = nombre;
-        this.edad = edad;
-    }
-
-    public setEdad(edad:number):void {
-        this.edad = edad;
-    }
-
-    public getEdad():number {
-        return this.edad;
-    }
-
-    public getNombre():string {
-        return this.nombre;
+    constructor(nombre:string, edad:number, userName:string) {
+        super(nombre, edad);
+        this.userName = userName;        
     }
 
     public mostrar():string {
-        return "Nombre: " +this.nombre+" Edad: " + this.edad;
+        return super.mostrar() + ` Usuario: ${this.userName}`; 
     }
 
+    consultar(): string{return "Puede";}
+    guardar(): string{return "Puede";}
+    modificar(): string{return "No Puede";}
+    eliminar():string{return "No Puede";}
 }
-
