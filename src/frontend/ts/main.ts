@@ -5,21 +5,33 @@ function SayHello(){
     document.getElementById("textarea_1").innerHTML = new_value ;
 }
 
-class Main implements EventListenerObject{
+class Main implements EventListenerObject, ResponseLister {
     public listaPersonas: Array<Persona> = new Array();
     public usr: Persona;
     public adm: Persona;
+    public frm: FrameWork = new FrameWork();
     constructor() {
         this.listaPersonas.push(new Usuario("Roberto",42,"rob"));
         this.listaPersonas.push(new Administrador("Javier", 45));
         this.usr = new Usuario("Roberto",42,"rob");
         this.adm = new Administrador("Javier", 45);
-        //console.log(this.usr.mostrar());
+        
+        this.frm.ejecutarRequest("GET", "http://localhost:8000/devices", this);
+        
     }
-    public handleEvent(object: Event): void {      
+    public handleEvent(object: Event): void {  
+        let obj = <HTMLInputElement> object.target;    
         if(object.type == "click")
-            alert("From "+object.target.id +" Hola Mundo!!!! " + this.listaPersonas[0].getNombre());
+            alert("From "+obj.id +" Hola Mundo!!!! " + this.listaPersonas[0].getNombre());
     };
+
+    public handlerResponse(status: number, response: string) {
+        if(status = 200) {
+            let resp:Array<Device> = JSON.parse(response);
+                for (let dips of resp)
+                    console.log(dips.name, dips.state);
+        }
+    }
 }
 function inicio() { 
     
