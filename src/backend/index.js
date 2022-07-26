@@ -3,9 +3,10 @@
 var PORT    = 3000;
 
 var express = require('express');
+const connection = require('./mysql-connector');
 var app     = express();
 var utils   = require('./mysql-connector');
-var fs      = require('fs');
+// var fs      = require('fs');
 
 // to parse application/json
 app.use(express.json()); 
@@ -13,50 +14,90 @@ app.use(express.json());
 app.use(express.static('/home/node/app/static/'));
 
 //=======[ Main module code ]==================================================
-
 app.get('/devices/', function(req, res, next) {
-    devices = [
-        { 
-            'id': 1, 
-            'name': 'Lampara 1', 
-            'description': 'Luz living', 
-            'state': 0, 
-            'type': 1, 
-        },
-        { 
-            'id': 2, 
-            'name': 'Ventilador 1', 
-            'description': 'Ventilador Habitacion', 
-            'state': 1, 
-            'type': 2, 
-        },
-    ]
-   
-    res.send(JSON.stringify(devices)).status(200);
-});
-
-app.get('/dato/', function(req, res, next) {
-
-    fs.readFile('/home/node/app/src/datos.json',(err, data)=> {
+    connection.query("SELECT * FROM Devices", function (err, result, fields) {
         if (err) {
             console.error(err);
             return;
-          }
-        data = JSON.parse(data);
-        console.log(JSON.stringify(data));
-        res.json(data).status(200);
+        }
+        // console.log(result);
+        res.send(JSON.stringify(result)).status(200);
+    });
+ });
+
+app.get('/devices/:id', function(req, res, next) {
+    connection.query(`SELECT * FROM Devices WHERE id = ${req.params.id}`, function (err, result, fields) {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        // console.log(result);
+        res.send(JSON.stringify(result[0])).status(200);
+    });
+ });
+
+ app.post('/update', function(req, res, next) {
+    connection.query(`UPDATE Devices SET state = ${req.body.state} WHERE id = ${req.body.id}`, function (err, result, fields) {
+        if (err) {
+            console.error(err);
+            return;
+        }
+         console.log(result);
+        res.status(200);
     });   
-    
-});
 
-app.get('/devices/:id/:state', function(req, res, next) {
-    res.send("Parametros: " + req.params.id + " " + req.params.state); 
-}); 
-
-
-app.listen(PORT, function(req, res) {
+ });
+ 
+ app.listen(PORT, function(req, res) {
     console.log("NodeJS API running correctly");
 });
+//============================================================================
+
+//=======[ Main module code ]==================================================
+
+// app.get('/devices/', function(req, res, next) {
+//     devices = [
+//         { 
+//             'id': 1, 
+//             'name': 'Lampara 1', 
+//             'description': 'Luz living', 
+//             'state': 0, 
+//             'type': 1, 
+//         },
+//         { 
+//             'id': 2, 
+//             'name': 'Ventilador 1', 
+//             'description': 'Ventilador Habitacion', 
+//             'state': 1, 
+//             'type': 2, 
+//         },
+//     ]
+   
+//     res.send(JSON.stringify(devices)).status(200);
+// });
+
+// app.get('/dato/', function(req, res, next) {
+
+//     fs.readFile('/home/node/app/src/datos.json',(err, data)=> {
+//         if (err) {
+//             console.error(err);
+//             return;
+//           }
+//         data = JSON.parse(data);
+//         console.log(JSON.stringify(data));
+//         res.json(data).status(200);
+//     });   
+    
+// });
+
+// app.get('/devices/:id/:state', function(req, res, next) {
+//     res.send("Parametros: " + req.params.id + " " + req.params.state); 
+// }); 
+
+
+// app.listen(PORT, function(req, res) {
+//     console.log("NodeJS API running correctly");
+// });
 
 // //============================================================================
 // //import de modulo eventos
