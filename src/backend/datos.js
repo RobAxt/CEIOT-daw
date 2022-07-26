@@ -1,0 +1,1 @@
+module.exports={nombre:'Brian',apellido:'Ducca'}
