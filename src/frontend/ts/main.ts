@@ -37,26 +37,26 @@ function inicio() {
     
     let btnSaludar = document.getElementById("btnSaludar");
 
-    btnSaludar.addEventListener("click",btnSaludarClick);
-    btnSaludar.addEventListener("click",function(){alert("Hola Mundo!!");}); //funcion anonima
-    btnSaludar.addEventListener("click",()=>{alert("Hola Mundo!!!");}); //arrow funcion
+    // btnSaludar.addEventListener("click",btnSaludarClick);
+    // btnSaludar.addEventListener("click",function(){alert("Hola Mundo!!");}); //funcion anonima
+    // btnSaludar.addEventListener("click",()=>{alert("Hola Mundo!!!");}); //arrow funcion
     
     let main:Main = new Main();
     
     //let click:EventListenerObject  = main;
     btnSaludar.addEventListener("click",main);
     let texto = document.getElementById("textarea_1");
-    texto.innerHTML = main.usr.mostrar() + "\r\n" 
-    texto.innerHTML += main.adm.mostrar() + "\r\n";
+    // texto.innerHTML = main.usr.mostrar() + "\r\n" 
+    // texto.innerHTML += main.adm.mostrar() + "\r\n";
     for(let i in main.listaPersonas)
-        texto.innerHTML += main.listaPersonas[i].mostrar();
+        texto.innerHTML += main.listaPersonas[i].mostrar() + "\r\n";
     /*console.log("usuario", main.usr.eliminar());
     console.log("administrador", main.adm.eliminar());*/
 }
 
-function btnSaludarClick():void {
-    alert("Hola Mundo!");
-}
+// function btnSaludarClick():void {
+//     alert("Hola Mundo!");
+// }
 
 window.addEventListener("load",inicio);
 //window.onload = inicio;

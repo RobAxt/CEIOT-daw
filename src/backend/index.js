@@ -3,10 +3,10 @@
 var PORT    = 3000;
 
 var express = require('express');
-const connection = require('./mysql-connector');
 var app     = express();
 var utils   = require('./mysql-connector');
-// var fs      = require('fs');
+var utils2  = require('./datos');
+console.log(JSON.stringify(utils2));
 
 // to parse application/json
 app.use(express.json()); 
@@ -15,7 +15,7 @@ app.use(express.static('/home/node/app/static/'));
 
 //=======[ Main module code ]==================================================
 app.get('/devices/', function(req, res, next) {
-    connection.query("SELECT * FROM Devices", function (err, result, fields) {
+    utils.query("SELECT * FROM Devices", function (err, result, fields) {
         if (err) {
             console.error(err);
             return;
@@ -26,7 +26,7 @@ app.get('/devices/', function(req, res, next) {
  });
 
 app.get('/devices/:id', function(req, res, next) {
-    connection.query(`SELECT * FROM Devices WHERE id = ${req.params.id}`, function (err, result, fields) {
+    utils.query(`SELECT * FROM Devices WHERE id = ${req.params.id}`, function (err, result, fields) {
         if (err) {
             console.error(err);
             return;
@@ -37,7 +37,7 @@ app.get('/devices/:id', function(req, res, next) {
  });
 
  app.post('/update', function(req, res, next) {
-    connection.query(`UPDATE Devices SET state = ${req.body.state} WHERE id = ${req.body.id}`, function (err, result, fields) {
+    utils.query(`UPDATE Devices SET state = ${req.body.state} WHERE id = ${req.body.id}`, function (err, result, fields) {
         if (err) {
             console.error(err);
             return;
@@ -51,6 +51,7 @@ app.get('/devices/:id', function(req, res, next) {
  app.listen(PORT, function(req, res) {
     console.log("NodeJS API running correctly");
 });
+
 //============================================================================
 
 //=======[ Main module code ]==================================================
