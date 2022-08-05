@@ -4,6 +4,12 @@
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       <link type="text/css" rel="stylesheet" href="./static/css/materialize.min.css"  media="screen,projection"/>
       <link type="text/css" rel="stylesheet" href="./static/css/styles.css"  media="screen,projection"/>
+		<!--JavaScript at end of body for optimized loading-->
+		<script type="text/javascript" src="./static/js/materialize.min.js"></script>
+        <script type="text/javascript" src="js/device.js"></script>
+        <script type="text/javascript" src="js/queryServer.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
+
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
     <body>
@@ -23,11 +29,17 @@
                 <h3>Smart Home Web Client!</h3>
                 <br/>
                 <div class="row">
-                    <div class="input-field col s12 m12 l12 xl12">
-                        <textarea id="textarea_1" class="materialize-textarea" style="height: 150px;" readonly></textarea>
+                    <div id="dashboard" style="background-color: red;"> 
+             
                     </div>
                     <div class="col s4 m4 l2 xl2">
-                        <button class="btn waves-effect waves-light button-view" onclick="SayHello();" name="hello_button">PRESS ME</button>
+                        <button id="listDevice" class="btn waves-effect waves-light button-view" >List Device</button>
+                    </div>
+                    <div class="col s4 m4 l2 xl2">
+                        <button id="addDevice" class="btn waves-effect waves-light button-view" >Add Device</button>
+                    </div>
+                    <div class="col s4 m4 l2 xl2">
+                        <button id="deleteDevice" class="btn waves-effect waves-light button-view" >Delete Device</button>
                     </div>
                 </div>
             </div>	
@@ -51,8 +63,5 @@
                 </div>
             </div>
         </footer>
-		<!--JavaScript at end of body for optimized loading-->
-		<script type="text/javascript" src="js/materialize.min.js"></script>
-		<script type="text/javascript" src="js/main.js"></script>
     </body>
   </html>
