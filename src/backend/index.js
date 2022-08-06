@@ -65,9 +65,17 @@ app.post('/add', function(req, res, next) {
 }); 
 
 app.delete('/delete', function(req, res, next) {
-    console.log(req.body);
-    console.log("actualizar: "+ req.body.id);
-    res.send("deleted");
+    if (req.body.id != undefined && req.body.id > 0){
+        console.log("BORRAR: "+ req.body.id);
+        // utils.query(`DELETE FROM Devices WHERE id = ${req.body.id}`, function (err, result, fields) {
+        //     if (err) {
+        //         console.error(err);
+        //         res.send("Error interno").status(500);
+        //         return;
+        //     }
+             res.send(req.body).status(200);
+        // }); 
+    }
 }); 
 
 app.listen(PORT, function(req, res) {
