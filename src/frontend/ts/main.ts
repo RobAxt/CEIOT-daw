@@ -34,16 +34,16 @@ class Main implements EventListenerObject, ResponseListener {
                 </div>
                 <div class="input-field col s12">  
                     <i class="material-icons prefix">perm_device_information</i>
-                    <input type="text" id="addDeviceDescrption" class="autocomplete">
+                    <input type="text" id="addDeviceDescription" class="autocomplete">
                     <label for="autocomplete-input">Description</label>
                 </div>
                 <div class="input-field col s12">
                     <i class="material-icons prefix">menu</i>
                     <select id="addDeviceType">
-                        <option value="0" disabled selected>Choose Device</option>
-                        <option value="1">Iluminación</option>
-                        <option value="2">Persiana</option>
-                        <option value="3">Otro</option>
+                        <option value="-1" disabled selected>Choose Device</option>
+                        <option value="0">Iluminación</option>
+                        <option value="1">Persiana</option>
+                        <option value="2">Otro</option>
                     </select>
                     <label>Type</label>
                 </div>
@@ -63,7 +63,19 @@ class Main implements EventListenerObject, ResponseListener {
 
         // Evento de click en el boton + en el formulario que debe agregar un dispositovo
         if (e.type == "click" && objetoEvento.id == "addButton") {
-            alert("TODO: ADD");
+            let addDevName = document.getElementById("addDeviceName") as HTMLInputElement;
+            let addDevDescp = document.getElementById("addDeviceDescription") as HTMLInputElement;
+            let addDevType = document.getElementById("addDeviceType") as HTMLInputElement;
+            let name:string = addDevName.value;
+            let description:string = addDevDescp.value;
+            let type:Number = Number(addDevType.value);
+            if( name == "" || description == "" || type == -1){
+                alert("New Device not configured");
+            } else {
+                let datos = { "name": name, "description": description, "type": type };
+                this.queryServer.query("POST","http://localhost:8000/add", this, datos);
+            }
+            console.log(name + " " + description + " " + type);
          }
 
          // Evento de click en el boton principal para borrar dispositvo
@@ -95,8 +107,8 @@ class Main implements EventListenerObject, ResponseListener {
 
         // Evento de click en el boton borrar en el formulario que debe borrar un dispositovo 
         if (e.type == "click" && objetoEvento.id == "deleteButton") { 
-            let delDev = document.getElementById("deleteDeviceId");
-            let id:Number = delDev.value; // del select del formulario obtengo que dispositivo se eligio
+            let delDev = document.getElementById("deleteDeviceId") as HTMLInputElement;
+            let id:Number = Number(delDev.value); // del select del formulario obtengo que dispositivo se eligio
 
             if(id > 0) { // ids mayores a cero son ids validos
                 let datos = { "id": id };

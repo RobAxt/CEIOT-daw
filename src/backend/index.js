@@ -59,22 +59,30 @@ app.put('/update', function(req, res, next) {
 });
 
 app.post('/add', function(req, res, next) {
-    console.log(req.body);
-    console.log("actualizar: "+ req.body.id);
-    res.send("added");
+    if (req.body.name != undefined && req.body.description != undefined && req.body.type != undefined && req.body.type >= 0){
+        console.log("ADD: Name: " + req.body.name + " Description: " + req.body.description + " Type: " + req.body.type);
+        utils.query(`INSERT INTO Devices (name, description, state, type) VALUES ("${req.body.name}","${req.body.description}",0,${req.body.type})`, function (err, result, fields) {
+            if (err) {
+                console.error(err);
+                res.send("Error interno").status(500);
+                return;
+            }
+             res.send(req.body).status(200);
+        }); 
+    }
 }); 
 
 app.delete('/delete', function(req, res, next) {
     if (req.body.id != undefined && req.body.id > 0){
         console.log("BORRAR: "+ req.body.id);
-        // utils.query(`DELETE FROM Devices WHERE id = ${req.body.id}`, function (err, result, fields) {
-        //     if (err) {
-        //         console.error(err);
-        //         res.send("Error interno").status(500);
-        //         return;
-        //     }
+        utils.query(`DELETE FROM Devices WHERE id = ${req.body.id}`, function (err, result, fields) {
+            if (err) {
+                 console.error(err);
+                 res.send("Error interno").status(500);
+                 return;
+             }
              res.send(req.body).status(200);
-        // }); 
+        }); 
     }
 }); 
 
