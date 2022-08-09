@@ -32,18 +32,20 @@ class Main implements EventListenerObject, ResponseListener {
             }
             let editDev = document.getElementById("dashboard");
             let editDevFormHTML: string = `<div class="row">
-                <a class="btn-floating btn-large waves-effect waves-light red align right"><i class="material-icons" id="editButton_${i}">edit</i></a>
-                <div class="input-field col s12">
+                <div class="input-field col s12 m12 l12 xl12">
+                    <a class="btn-floating btn-large waves-effect waves-light red align right"><i class="material-icons" id="editButton_${i}">edit</i></a>
+                </div>
+                <div class="input-field col s12 m12 l12 xl12">
                     <i class="material-icons prefix">devices</i>
-                    <input type="text" id="editDeviceName" class="autocomplete">
-                    <label for="autocomplete-input">${this.devList[i].name}</label>
+                    <input placeholder="${this.devList[i].name}" type="text" id="editDeviceName">
+                    <label for="editDeviceName">Name</label>
                 </div>
-                <div class="input-field col s12">  
+                <div class="input-field col s12 m12 l12 xl12">  
                     <i class="material-icons prefix">perm_device_information</i>
-                    <input type="text" id="editDeviceDescription" class="autocomplete">
-                    <label for="autocomplete-input">${this.devList[i].description}</label>
+                    <input placeholder="${this.devList[i].description}" type="text" id="editDeviceDescription" class="autocomplete">
+                    <label for="editDeviceDescription">Description</label>
                 </div>
-                <div class="input-field col s12">
+                <div class="input-field col s12 m12 l12 xl12">
                     <i class="material-icons prefix">menu</i>
                     <select id="editDeviceType">`
             editDevFormHTML += this.devList[i].type == 0 ?`<option value="0" selected>Iluminación</option>`:`<option value="0">Iluminación</option>`;
@@ -52,11 +54,9 @@ class Main implements EventListenerObject, ResponseListener {
             editDevFormHTML += `</select><label>Type</label></div></div>`;
             editDev.innerHTML = editDevFormHTML;
             
-            var elems1 = document.querySelectorAll('autocomplete');
-            var instances = M.Autocomplete.init(elems1);
-
-            var elems2 = document.querySelectorAll('select');
-            instances = M.FormSelect.init(elems2);
+            var elems = document.querySelectorAll('select');
+            var instances = M.FormSelect.init(elems);
+            M.updateTextFields();
 
             let addButton = document.getElementById(`editButton_${i}`);
             addButton.addEventListener("click",this);
@@ -82,7 +82,9 @@ class Main implements EventListenerObject, ResponseListener {
             if(Number(editDevType.value) != this.devList[index].type) {
                 let data = { "id": this.devList[index].id, "key": "type", "value": Number(editDevType.value) };
                 this.queryServer.query("PUT","http://localhost:8000/update", this, data);
-            }        
+            }   
+            
+            this.queryServer.query("GET", "http://localhost:8000/devices", this);
         }
 
 //=================================================================
@@ -102,18 +104,20 @@ class Main implements EventListenerObject, ResponseListener {
         if (e.type == "click" && objetoEvento.id == "addDevice") {
             let newDev = document.getElementById("dashboard");
             let devFormHTML: string = `<div class="row">
-                <a class="btn-floating btn-large waves-effect waves-light red align right"><i class="material-icons" id="addButton">add</i></a>
-                <div class="input-field col s12">
+                <div class="input-field col s12 m12 l12 xl12">
+                    <a class="btn-floating btn-large waves-effect waves-light red align right"><i class="material-icons" id="addButton">add</i></a>
+                </div>
+                <div class="input-field col s12 m12 l12 xl12">
                     <i class="material-icons prefix">devices</i>
-                    <input type="text" id="addDeviceName" class="autocomplete">
-                    <label for="autocomplete-input">Name</label>
+                    <label for="addDeviceName">Name</label>
+                    <input type="text" id="addDeviceName" class="autocomplete" value="">
                 </div>
-                <div class="input-field col s12">  
+                <div class="input-field col s12 m12 l12 xl12">  
                     <i class="material-icons prefix">perm_device_information</i>
+                    <label for="addDeviceDescription">Description</label>
                     <input type="text" id="addDeviceDescription" class="autocomplete">
-                    <label for="autocomplete-input">Description</label>
                 </div>
-                <div class="input-field col s12">
+                <div class="input-field col s12 m12 l12 xl12">
                     <i class="material-icons prefix">menu</i>
                     <select id="addDeviceType">
                         <option value="-1" disabled selected>Choose Device</option>
@@ -123,15 +127,11 @@ class Main implements EventListenerObject, ResponseListener {
                     </select>
                     <label>Type</label>
                 </div>
-
-              </div>`;
+            </div>`;
             newDev.innerHTML = devFormHTML;
             
-            var elems1 = document.querySelectorAll('autocomplete');
-            var instances = M.Autocomplete.init(elems1);
-
-            var elems2 = document.querySelectorAll('select');
-            instances = M.FormSelect.init(elems2);
+            var elems = document.querySelectorAll('select');
+            var instances = M.FormSelect.init(elems);
 
             let addButton = document.getElementById("addButton");
             addButton.addEventListener("click",this);
@@ -146,12 +146,15 @@ class Main implements EventListenerObject, ResponseListener {
             let description:string = addDevDescp.value;
             let type:number = Number(addDevType.value);
             if( name == "" || description == "" || type == -1){
-                alert("New Device not configured");
+                M.toast({html: 'New Device not configured'});
+                return;
             } else {
                 let datos = { "name": name, "description": description, "type": type };
                 this.queryServer.query("POST","http://localhost:8000/add", this, datos);
             }
             console.log(name + " " + description + " " + type);
+
+            this.queryServer.query("GET", "http://localhost:8000/devices", this);
          }
 
 //=================================================================
@@ -162,18 +165,20 @@ class Main implements EventListenerObject, ResponseListener {
         if (e.type == "click" && objetoEvento.id == "deleteDevice") {
             let newDev = document.getElementById("dashboard");
             let devFormHTML: string = `<div class="row">
-                <a class="btn-floating btn-large waves-effect waves-light red align right"><i class="material-icons" id="deleteButton">delete_forever</i></a>
-                <div class="input-field col s12">
-                <div class="input-field col s12">
-                <i class="material-icons prefix">menu</i>
-                <select id="deleteDeviceId">
-                    <option value="0" disabled selected>Choose Device</option>`;
+                <div class="input-field col s12 m12 l12 xl12">
+                    <a class="btn-floating btn-large waves-effect waves-light red align right"><i class="material-icons" id="deleteButton">delete_forever</i></a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12 m12 l12 xl12">
+                    <i class="material-icons prefix">menu</i>
+                    <select id="deleteDeviceId">
+                        <label>Devices</label>
+                        <option value="0" disabled selected>Choose Device</option>`;
             for(let dev of this.devList) {
                 devFormHTML+=`<option value="${dev.id}">${dev.name}</option>`
             }
-                    
             devFormHTML+= `</select>
-                    <label>Devices</label>
                  </div>
             </div>`;
             newDev.innerHTML = devFormHTML;
@@ -194,7 +199,7 @@ class Main implements EventListenerObject, ResponseListener {
                 let datos = { "id": id };
                 this.queryServer.query("DELETE","http://localhost:8000/delete", this, datos);
             } else { // significa que no se selecciono un dispositivo
-                alert("Device not selected");
+                M.toast({html: 'Device not selected'});
             }
         }
     }
