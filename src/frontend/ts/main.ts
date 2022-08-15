@@ -36,7 +36,7 @@ class Main implements EventListenerObject, ResponseListener {
                     <a class="btn-floating btn-large waves-effect waves-light red align right"><i class="material-icons" id="editButton_${i}">edit</i></a>
                 </div>
                 <div class="input-field col s12 m12 l12 xl12">
-                    <i class="material-icons prefix">devices</i>
+                    <i class="material-icons prefix">stay_current_portrait</i>
                     <input placeholder="${this.devList[i].name}" type="text" id="editDeviceName">
                     <label for="editDeviceName">Name</label>
                 </div>
@@ -56,6 +56,7 @@ class Main implements EventListenerObject, ResponseListener {
             
             var elems = document.querySelectorAll('select');
             var instances = M.FormSelect.init(elems);
+            
             M.updateTextFields();
 
             let addButton = document.getElementById(`editButton_${i}`);
@@ -84,7 +85,10 @@ class Main implements EventListenerObject, ResponseListener {
                 this.queryServer.query("PUT","http://localhost:8000/update", this, data);
             }   
             
-            this.queryServer.query("GET", "http://localhost:8000/devices", this);
+            if(editDevName.value == "" && editDevDescp.value == "" &&  Number(editDevType.value) == this.devList[index].type)
+                M.toast({html: 'Device not modified'});
+            else
+                this.queryServer.query("GET", "http://localhost:8000/devices", this);
         }
 
 //=================================================================
@@ -198,6 +202,7 @@ class Main implements EventListenerObject, ResponseListener {
             if(id > 0) { // ids mayores a cero son ids validos
                 let datos = { "id": id };
                 this.queryServer.query("DELETE","http://localhost:8000/delete", this, datos);
+                this.queryServer.query("GET", "http://localhost:8000/devices", this);
             } else { // significa que no se selecciono un dispositivo
                 M.toast({html: 'Device not selected'});
             }
@@ -258,36 +263,32 @@ class Main implements EventListenerObject, ResponseListener {
     }
     
     handlerPOST(status:number,response:string):void {
-        if (status != 200) {
-            alert("Something went wrong when trying to add device.")
+        if (status != 200 && status != 201) {
+            M.toast({html: `Something went wrong when trying to add device.`});
             return;
         }
-        alert("Device Added.");
+        M.toast({html:"Device Added."});
     }
     
     handlerPUT(status:number,response:string):void {
         if (status != 200) {
-            alert("Something went wrong when trying to update device state.")
+            M.toast({html: `Something went wrong when trying to update device.`});
             return;
         }
         let resp =  JSON.parse(response);
         if(resp.key == "state")
-            alert("Device Updated " + resp.key +" to " + resp.value*100 + "%");
-        if(resp.key == "name")
-            alert("Device Updated " + resp.key +" to " + resp.value);
-        if(resp.key == "description")
-            alert("Device Updated " + resp.key +" to " + resp.value);
-        if(resp.key == "type")
-            alert("Device Updated " + resp.key +" to " + resp.value);
+            M.toast({html: "Device Updated " + resp.key +" to " + resp.value*100 + "%"});
+        else
+            M.toast({html: "Device Updated " + resp.key +" to " + resp.value});
     };
 
     handlerDELETE(status:number,response:string):void {
         if (status != 200) {
-            alert("Something went wrong when trying to delete device.")
+            M.toast({html: `Something went wrong when trying to delete device.`});
             return;
         }
         let resp = JSON.parse(response);
-        alert(`Device deleted (${resp.id})`);
+        M.toast({html: `Device deleted (${resp.id})`});
     }
 }
 
@@ -298,6 +299,9 @@ window.addEventListener("load", ()=> {
     let btnAddDevice = document.getElementById("addDevice");
     let btnDeleteDevice = document.getElementById("deleteDevice");
     let main: Main = new Main();
+
+    var elems = document.querySelectorAll('.fixed-action-btn');
+    var instances = M.FloatingActionButton.init(elems);
  
     btnListDevice.addEventListener("click", main);
     btnAddDevice.addEventListener("click", main);

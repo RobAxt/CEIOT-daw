@@ -36,7 +36,7 @@ app.get('/device/:id', function(req, res, next) {
         });
     } else {
         console.error("GET a device: invalid id");
-        res.send("Invalid Id").status(400);
+        res.send({"error": "invalid id"}).status(400);
     }
 });
 
@@ -54,7 +54,7 @@ app.put('/update', function(req, res, next) {
         }); 
     } else {
         console.error("PUT Update: error en parámetros del body");
-        res.send("Error en parámetros del body").status(400);
+        res.send({"error": "wrong body"}).status(400);
     }
 });
 
@@ -67,7 +67,7 @@ app.post('/add', function(req, res, next) {
                 res.send({"error": "Error interno"}).status(500);
                 return;
             }
-             res.send(req.body).status(200);
+             res.send(req.body).status(201);
         }); 
     }
 }); 
