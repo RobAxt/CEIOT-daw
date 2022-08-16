@@ -152,21 +152,46 @@ En la siguiente ilustración podés ver cómo está organizado el proyecto para 
 
 ## Detalles de implementación 💻
 
-En esta sección podés ver los detalles específicos de funcionamiento del código y que son los siguientes.
-
 <details><summary><b>Mira los detalles de implementación</b></summary><br>
+
+### Base de datos
+
+Se modifica la base de datos de la siguiente manera.
+
+| Nombre | Tipo | key   | Extra | 
+| :---: | :---: | :---: | :---: |
+|id     | int(11) | Primary key |Auto increment |
+|name   | varchar(64) |        |               |
+|description | varchar(128) |        |               |
+|state  | float  |        |               |
+|type   | int(11) |        |               |
+
 
 ### Agregar un dispositivo
 
-Completá los pasos para agregar un dispositivo desde el cliente web.
+Para agregar un dispositivo hacer click en el boton flotante verde y elegir la opción amarilla con el simbolo "+"
 
-### Frontend
+![boton flotante / opción +](doc/front.png)
 
-Completá todos los detalles sobre cómo armaste el frontend, sus interacciones, etc.
+A continuacion llenar el formulario y clickear en el boton rojo con el simbolo "+"
 
-### Backend
+![formulario add](doc/add_form.png)
 
-Completá todos los detalles de funcionamiento sobre el backend, sus interacciones con el cliente web, la base de datos, etc.
+### Borrar un dispositivo
+
+Para borrar un dispositivo hacer click en el botón flotante verde y elegir la opción roja con el símbolo del tachito de basura
+![boton flotante / opción tachito](doc/front.png)
+
+A continucación elegir el elemento del formulario y hacer click en el botón rojo con el símbolo del tachito de basura
+![formulario add](doc/delete_form.png)
+
+### Editar un dispositivo
+
+Para editar un dispositivo hacer click en el botón flotante azul con el símbolo del lapiz que se encuentra al costado de cada dispositivo
+![boton flotante / opción tachito](doc/front.png)
+
+A continucación editar el formulario y hacer click en el botón rojo con el símbolo del lapiz
+![formulario add](doc/edit_form.png)
 
 <details><summary><b>Ver los endpoints disponibles</b></summary><br>
 
@@ -180,7 +205,7 @@ Completá todos los endpoints del backend con los metodos disponibles, los heade
     "request_headers": "application/json",
     "request_body": "",
     "response_code": 200,
-    "request_body": {
+    "response_body": {
         "devices": [
             {
                 "id": 1,
@@ -190,8 +215,89 @@ Completá todos los endpoints del backend con los metodos disponibles, los heade
         ]
     },
 }
+```
+
+2) Devolver un dispositivo por su id.
+```json
+{
+    "method": "get",
+    "request_headers": "application/json",
+    "request_body": "",
+    "parameter": "id",
+    "response_code": 200,
+    "response_body": {
+        {
+            "id": 1,
+            "name": "Lampara 1",
+            "description": "Luz living",
+            "state": 0.2,
+            "type": 0
+        }
+    }
+}
+```
+
+3) Agrega un dispositivo
+```json
+{
+    "method": "post",
+    "request_headers": "application/json",
+    "request_body": {
+        {
+            "name": "Lampara 2", 
+            "description":  "Luz living",
+            "type": 0
+        }
+    },
+    "response_code": 201,
+    "response_body": 
+        {
+            "name": "Lampara 2", 
+            "description":  "Luz living",
+            "type": 0
+        }
+}
 ``` 
 
+4) Modificar un parámetro de la tabla
+```json
+{
+    "method": "put",
+    "request_headers": "application/json",
+    "request_body": {
+        {
+            "id": 1, 
+            "key": "status",
+            "value": "0.3"
+        }
+    },
+    "response_code": 200,
+    "response_body": 
+        {
+            "id": 1, 
+            "key": "status",
+            "value": "0.3"
+        }
+}
+``` 
+
+5) Borrar un elemento
+```json
+{
+    "method": "delete",
+    "request_headers": "application/json",
+    "request_body": {
+        {
+            "id": 1
+        }
+    },
+    "response_code": 201,
+    "response_body": 
+        {
+            "id": 1
+        }
+}
+``` 
 </details>
 
 </details>

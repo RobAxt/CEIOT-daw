@@ -20,19 +20,19 @@ app.get('/devices/', function(req, res, next) {
             res.send({"error": "Error interno"}).status(500);
             return;
         }
-        res.send(JSON.stringify(result)).status(200);
+        res.send(result).status(200);
     });
 });
 
 app.get('/device/:id', function(req, res, next) {
     if(req.params.id != undefined && req.params.id > 0) {
-        utils.query(`SELECT * FROM Devices WHERE id = ${req.params.id}`, function (err, result, fields) {
+        utils.query("SELECT * FROM Devices WHERE id = ?",[req.params.id], function (err, result, fields) {
             if (err) {
                 console.error(err);
                 res.send({"error": "Error interno"}).status(500);
                 return;
             }
-            res.send(JSON.stringify(result[0])).status(200);
+            res.send(result[0]).status(200);
         });
     } else {
         console.error("GET a device: invalid id");
@@ -43,7 +43,8 @@ app.get('/device/:id', function(req, res, next) {
 app.put('/update', function(req, res, next) {
     if (req.body.id != undefined && req.body.key != undefined && req.body.value != undefined&& req.body.id > 0 ) {
         console.log(`id: ${req.body.id} and key: ${req.body.key} - value: ${req.body.value}`);
-        utils.query(`UPDATE Devices SET ${req.body.key} = "${req.body.value}" WHERE id = ${req.body.id}`, function (err, result, fields) {
+        //    utils.query("UPDATE Devices SET ? = ? WHERE id = ?", [req.body.key, req.body.value, req.body.id], function (err, result, fields) { // <-- esto no me andubo
+            utils.query(`UPDATE Devices SET ${req.body.key} = "${req.body.value}" WHERE id = ${req.body.id}`, function (err, result, fields) {
             if (err) {
                 console.error(err);
                 res.send({"error": "Error interno"}).status(500);
@@ -61,7 +62,7 @@ app.put('/update', function(req, res, next) {
 app.post('/add', function(req, res, next) {
     if (req.body.name != undefined && req.body.description != undefined && req.body.type != undefined && req.body.type >= 0){
         console.log("ADD: Name: " + req.body.name + " Description: " + req.body.description + " Type: " + req.body.type);
-        utils.query(`INSERT INTO Devices (name, description, state, type) VALUES ("${req.body.name}","${req.body.description}",0,${req.body.type})`, function (err, result, fields) {
+        utils.query("INSERT INTO Devices (name, description, state, type) VALUES (?,?,0,?)",[req.body.name, req.body.description, req.body.type], function (err, result, fields) {
             if (err) {
                 console.error(err);
                 res.send({"error": "Error interno"}).status(500);
@@ -75,7 +76,7 @@ app.post('/add', function(req, res, next) {
 app.delete('/delete', function(req, res, next) {
     if (req.body.id != undefined && req.body.id > 0){
         console.log("BORRAR: "+ req.body.id);
-        utils.query(`DELETE FROM Devices WHERE id = ${req.body.id}`, function (err, result, fields) {
+        utils.query("DELETE FROM Devices WHERE id = ?",[req.body.id], function (err, result, fields) {
             if (err) {
                  console.error(err);
                  res.send({"error": "Error interno"}).status(500);
