@@ -50,7 +50,7 @@ class Main implements EventListenerObject, ResponseListener {
                     <select id="editDeviceType">`
             editDevFormHTML += this.devList[i].type == 0 ?`<option value="0" selected>Iluminación</option>`:`<option value="0">Iluminación</option>`;
             editDevFormHTML += this.devList[i].type == 1 ?`<option value="1" selected>Persiana</option>`   :`<option value="1">Persiana</option>`;
-            editDevFormHTML += this.devList[i].type == 2 ?`<option value="2" selected>Otro</option>`       :`<option value="2">Otro</option>`
+            editDevFormHTML += this.devList[i].type == 2 ?`<option value="2" selected>Otro</option>`       :`<option value="2">Otro</option>`;
             editDevFormHTML += `</select><label>Type</label></div></div>`;
             editDev.innerHTML = editDevFormHTML;
             
@@ -215,8 +215,10 @@ class Main implements EventListenerObject, ResponseListener {
 
     // Manejador de la respuesta del servidor al método GET, que debe cargar la lista de dispositivos en el dashboard
     handlerGET(status:number,response:string):void {
-        if (status != 200) 
+        if (status != 200) {
+            M.toast({html: 'Something went wrong :-('});
             return;
+        }
         this.devList = JSON.parse(response);
         let devListDiv = document.getElementById("dashboard");
         let devListHTML: string = `<ul class="collection">`;

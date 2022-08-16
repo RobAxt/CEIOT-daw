@@ -187,7 +187,7 @@ A continucación elegir el elemento del formulario y hacer click en el botón ro
 
 ### Editar un dispositivo
 
-Para editar un dispositivo hacer click en el botón flotante azul con el símbolo del lapiz que se encuentra al costado de cada dispositivo
+Para editar un dispositivo hacer click en el botón azul con el símbolo del lapiz que se encuentra al costado de cada dispositivo
 ![boton flotante / opción tachito](doc/front.png)
 
 A continucación editar el formulario y hacer click en el botón rojo con el símbolo del lapiz

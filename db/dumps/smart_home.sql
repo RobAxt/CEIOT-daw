@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql-server:3306
--- Tiempo de generación: 06-08-2022 a las 01:45:20
+-- Tiempo de generación: 16-08-2022 a las 02:54:55
 -- Versión del servidor: 5.7.38
 -- Versión de PHP: 8.0.19
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `smart_home`
 --
+CREATE DATABASE IF NOT EXISTS `smart_home` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `smart_home`;
 
 -- --------------------------------------------------------
 
@@ -27,13 +29,15 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `Devices`
 --
 
-CREATE TABLE `Devices` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `Devices`;
+CREATE TABLE IF NOT EXISTS `Devices` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `description` varchar(128) NOT NULL,
   `state` float NOT NULL,
-  `type` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `type` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `Devices`
@@ -47,26 +51,6 @@ INSERT INTO `Devices` (`id`, `name`, `description`, `state`, `type`) VALUES
 (5, 'Persiana 2', 'Persiana de la cocina', 1, 1),
 (6, 'Persiana 3', 'Persiana balcon', 0.88, 1),
 (7, 'Lampara 3', 'luz dormitorio', 0.38, 0);
-
---
--- Índices para tablas volcadas
---
-
---
--- Indices de la tabla `Devices`
---
-ALTER TABLE `Devices`
-  ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `Devices`
---
-ALTER TABLE `Devices`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
