@@ -20,7 +20,9 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `smart_home`
 --
+CREATE DATABASE IF NOT EXISTS smart_home;
 
+USE smart_home;
 -- --------------------------------------------------------
 
 --
